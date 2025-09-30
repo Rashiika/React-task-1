@@ -1,9 +1,9 @@
-import {useDraggable} from '@dnd-kit/core';
+import {useSortable} from '@dnd-kit/sortable';
 import {CSS} from '@dnd-kit/utilities';
 
 
 const Card = ({id, content}) => {
-  const {attributes, listeners, setNodeRef, transform} = useDraggable({
+  const {attributes, listeners, setNodeRef, transform} = useSortable({
     id: id,
   });
   const style = {
