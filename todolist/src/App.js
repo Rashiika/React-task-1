@@ -2,11 +2,12 @@ import { useMemo, useState } from "react";
 import {DndContext, DragOverlay} from '@dnd-kit/core';
 import Column from "./Components/Column";
 import Card from "./Components/Card";
+import AddForm from "./Components/AddForm";
 
   const initialColumns = {
-    start: {id: 'start', title: 'To Do', taskIds: ['task-1', 'task-2']},
-    inProgress: {id: 'inProgress', title: 'In Progress', taskIds: ['task-3']},
-    completed: {id: 'completed', title: 'Completed', taskIds: ['task-4']}
+    start: {id: 'start', title: 'To Do', taskIds: ['task-1', 'task-2', 'task-5', 'task-9', 'task-10']},
+    inProgress: {id: 'inProgress', title: 'In Progress', taskIds: ['task-3', 'task-6', 'task-11']},
+    completed: {id: 'completed', title: 'Completed', taskIds: ['task-4', 'task-7', 'task-8', 'task-12']},
   }
 
   const initialTasks = {
@@ -14,6 +15,14 @@ import Card from "./Components/Card";
     'task-2': {id: 'task-2', content: 'Watch my favorite show', status: 'start'},
     'task-3': {id: 'task-3', content: 'Charge my phone', status: 'inProgress'},
     'task-4': {id: 'task-4', content: 'Cook dinner', status: 'completed'},
+    'task-5': {id: 'task-5', content: 'Take out the garbage', status: 'start'},
+    'task-6': {id: 'task-6', content: 'Watch my favorite show', status: 'start'},
+    'task-7': {id: 'task-7', content: 'Charge my phone', status: 'inProgress'},
+    'task-8': {id: 'task-8', content: 'Cook dinner', status: 'completed'},
+    'task-9': {id: 'task-9', content: 'Take out the garbage', status: 'start'},
+    'task-10': {id: 'task-10', content: 'Watch my favorite show', status: 'start'},
+    'task-11': {id: 'task-11', content: 'Charge my phone', status: 'inProgress'},
+    'task-12': {id: 'task-12', content: 'Cook dinner', status: 'completed'},
   }
 
   function App() {
@@ -21,6 +30,8 @@ import Card from "./Components/Card";
     const [columns, setColumns] = useState(initialColumns)
     const [tasks, setTasks] = useState(initialTasks)
     const [activeId, setActiveId] = useState(null)
+
+    console.log(tasks)
 
     const columnIds = useMemo(() => Object.keys(columns), [columns]);
     // console.log(columnIds)
@@ -30,6 +41,10 @@ import Card from "./Components/Card";
         return id;
       }
       return Object.keys(columns).find(key => columns[key].taskIds.includes(id));
+    }
+
+    const handleAddTask = () => {
+
     }
 
     const handleDragStart = (event) => {
@@ -98,8 +113,12 @@ import Card from "./Components/Card";
     const activeTask = activeId ? tasks[activeId] : null;
 
   return (
-    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div>
+    <div className="min-h-screen bg-gray-50 p-8">
+      <h1 className="text-4xl font-extrabold text-center text-gray-900 mb-12">To Do List</h1>
+      
+      <AddForm onAddTask = {handleAddTask} />
+      <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+      <div className="flex flex-wrap justify-center lg:flex-nowrap">
         {columnIds.map((columnId) => {
           const column = columns[columnId];
           const columnTasks = column.taskIds ? column.taskIds.map(taskId => tasks[taskId]) : [];
@@ -113,6 +132,7 @@ import Card from "./Components/Card";
         {activeTask ? <Card id={activeTask.id} content={activeTask.content} /> : null}
       </DragOverlay>
     </DndContext>
+    </div>
   );
 }
 
