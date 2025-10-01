@@ -43,9 +43,43 @@ import AddForm from "./Components/AddForm";
       return Object.keys(columns).find(key => columns[key].taskIds.includes(id));
     }
 
-    const handleAddTask = () => {
+    const handleAddTask = (content) => {
+      const newTaskId = `task-${Date.now()}`;
+      setTasks(prev => ({
+        ...prev,
+        [newTaskId]: {id: newTaskId, content: content, status: 'start'}
+      }))
 
+      setColumns(prev => ({
+        ...prev,
+        start: {
+          ...prev.start,
+          taskIds: [...prev.start.taskIds, newTaskId]
+        }
+      }))
     }
+
+    const handleDeleteTask = (taskId) => {
+  const taskToDelete = tasks[taskId];
+  if (!taskToDelete) return;
+
+  const columnId = findColumn(taskId);  // ✅ use your helper instead of status
+
+  setColumns(prev => ({
+    ...prev,
+    [columnId]: {
+      ...prev[columnId],
+      taskIds: prev[columnId].taskIds.filter(id => id !== taskId)
+    }
+  }));
+
+  setTasks(prev => {
+    const newTasks = { ...prev };
+    delete newTasks[taskId];
+    return newTasks;
+  });
+};
+
 
     const handleDragStart = (event) => {
       setActiveId(event.active.id);
@@ -121,15 +155,15 @@ import AddForm from "./Components/AddForm";
       <div className="flex flex-wrap justify-center lg:flex-nowrap">
         {columnIds.map((columnId) => {
           const column = columns[columnId];
-          const columnTasks = column.taskIds ? column.taskIds.map(taskId => tasks[taskId]) : [];
+          const columnTasks = column.taskIds ? column.taskIds.map(taskId => tasks[taskId]).filter(task => task) : [];
           return (
-            <Column key={columnId} id={columnId} title={column.title} tasks={columnTasks} allTaskIds={column.taskIds} />
+            <Column key={columnId} id={columnId} title={column.title} tasks={columnTasks} allTaskIds={column.taskIds} onDeleteTask={handleDeleteTask} />
           )
         })}
       </div>
 
       <DragOverlay>
-        {activeTask ? <Card id={activeTask.id} content={activeTask.content} /> : null}
+        {activeTask ? <Card id={activeTask.id} content={activeTask.content} onDeleteTask={handleDeleteTask}  /> : null} 
       </DragOverlay>
     </DndContext>
     </div>

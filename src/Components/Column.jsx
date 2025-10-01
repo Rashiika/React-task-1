@@ -2,7 +2,7 @@ import {useDroppable} from '@dnd-kit/core';
 import Card from './Card';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
-const Column = ({id, title, tasks, allTaskIds}) => {
+const Column = ({id, title, tasks, allTaskIds, onDeleteTask}) => {
   const {setNodeRef, isOver} = useDroppable({
     id: id,
   });
@@ -15,7 +15,7 @@ const Column = ({id, title, tasks, allTaskIds}) => {
       <SortableContext items={allTaskIds} strategy={verticalListSortingStrategy}>
       <div className='min-h-[100px] p-2' ref={setNodeRef}>
         {tasks.map((task) => (
-          <Card key={task.id} id={task.id} content={task.content} />
+          <Card key={task.id} id={task.id} content={task.content} onDeleteTask={onDeleteTask} />
         ))}
 
         {tasks.length === 0 && <div className='h-12 bg-gray-200 rounded-md border-2 border-dashed border-gray-400 p-4 text-center'>Currently no tasks</div>}
