@@ -1,17 +1,19 @@
-import { useState } from "react";
-import {DndContext} from '@dnd-kit/core';
+import { useMemo, useState } from "react";
+import {DndContext, DragOverlay} from '@dnd-kit/core';
+import Column from "./Components/Column";
+import Card from "./Components/Card";
 
   const initialColumns = {
-    start: {id: 'start', title: 'To Do'},
-    inProgress: {id: 'inProgress', title: 'In Progress'},
-    completed: {id: 'completed', title: 'Completed'}
+    start: {id: 'start', title: 'To Do', taskIds: ['task-1', 'task-2']},
+    inProgress: {id: 'inProgress', title: 'In Progress', taskIds: ['task-3']},
+    completed: {id: 'completed', title: 'Completed', taskIds: ['task-4']}
   }
 
   const initialTasks = {
-    'task-1': {id: 'task-1', content: 'Take out the garbage'},
-    'task-2': {id: 'task-2', content: 'Watch my favorite show'},
-    'task-3': {id: 'task-3', content: 'Charge my phone'},
-    'task-4': {id: 'task-4', content: 'Cook dinner'},
+    'task-1': {id: 'task-1', content: 'Take out the garbage', status: 'start'},
+    'task-2': {id: 'task-2', content: 'Watch my favorite show', status: 'start'},
+    'task-3': {id: 'task-3', content: 'Charge my phone', status: 'inProgress'},
+    'task-4': {id: 'task-4', content: 'Cook dinner', status: 'completed'},
   }
 
   function App() {
@@ -19,6 +21,9 @@ import {DndContext} from '@dnd-kit/core';
     const [columns, setColumns] = useState(initialColumns)
     const [tasks, setTasks] = useState(initialTasks)
     const [activeId, setActiveId] = useState(null)
+
+    const columnIds = useMemo(() => Object.keys(columns), [columns]);
+    // console.log(columnIds)
 
     const findColumn = (id) => {
       if(id in columns) {
@@ -71,7 +76,7 @@ import {DndContext} from '@dnd-kit/core';
 
         if(activeColumn !== overColumn) {
           setTasks(prevTasks => ({...prevTasks,
-            [activeId]: {...prevTasks[activeId], content: over.content}
+            [activeId]: {...prevTasks[activeId], status: overColumn}
           }))
         }
 
@@ -95,8 +100,18 @@ import {DndContext} from '@dnd-kit/core';
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div>
-        
+        {columnIds.map((columnId) => {
+          const column = columns[columnId];
+          const columnTasks = column.taskIds ? column.taskIds.map(taskId => tasks[taskId]) : [];
+          return (
+            <Column key={columnId} id={columnId} title={column.title} tasks={columnTasks} allTaskIds={column.taskIds} />
+          )
+        })}
       </div>
+
+      <DragOverlay>
+        {activeTask ? <Card id={activeTask.id} content={activeTask.content} /> : null}
+      </DragOverlay>
     </DndContext>
   );
 }
