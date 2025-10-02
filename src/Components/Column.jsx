@@ -14,6 +14,7 @@ const Column = ({id, title, tasks, allTaskIds, onDeleteTask}) => {
       <h2 className={`text-xl font-semibold mb-4 ${titleColor}`}>{title} ({tasks.length})</h2>
       
       <SortableContext items={allTaskIds} strategy={verticalListSortingStrategy}>
+        {/* 🔽 Scrollable container */}
         <div 
           className="min-h-[100px] max-h-[400px] overflow-y-auto pr-2 p-2 bg-white rounded-md shadow-inner" 
           ref={setNodeRef}

@@ -148,7 +148,7 @@ import AddForm from "./Components/AddForm";
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <h1 className="text-4xl font-extrabold text-center text-gray-900 mb-12">To Do List</h1>
+      <h1 className="text-4xl font-extrabold text-center text-gray-900 mb-12">Progress Tracker</h1>
       
       <AddForm onAddTask = {handleAddTask} />
       <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
