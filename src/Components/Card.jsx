@@ -31,7 +31,12 @@ const Card = ({ id, content, onDeleteTask }) => {
       {...listeners}
       {...attributes}
     >
-      <span className="pr-4">{content}</span>
+      <div className="flex-1 min-w-0">
+        <p className="pr-4 break-words whitespace-normal text-sm sm:text-base max-w-[200px] sm:max-w-[250px] lg:max-w-[300px]">
+          {content}
+        </p>
+      </div>
+      
       {!isDragging && <button
         className="ml-2 text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-100"
         onClick={() => onDeleteTask(id)}

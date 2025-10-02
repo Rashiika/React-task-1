@@ -152,7 +152,7 @@ import AddForm from "./Components/AddForm";
       
       <AddForm onAddTask = {handleAddTask} />
       <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="flex flex-wrap justify-center lg:flex-nowrap">
+      <div className="flex flex-wrap gap-4 justify-center lg:flex-nowrap lg:justify-between">
         {columnIds.map((columnId) => {
           const column = columns[columnId];
           const columnTasks = column.taskIds ? column.taskIds.map(taskId => tasks[taskId]).filter(task => task) : [];
